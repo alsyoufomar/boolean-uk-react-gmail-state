@@ -1,3 +1,5 @@
+// hello there! enjoy scanning (just wanted to say hi)
+
 import Header from './components/header'
 import { useState } from 'react'
 import initialEmails from './data/emails'
@@ -8,27 +10,47 @@ function App () {
   // Use initialEmails for state
   let [initEmails, setEmails] = useState(initialEmails)
 
-  const getReadEmails = (e) => {
-    setEmails((x) => {
-      if (e.target.checked) {
-        const ele = x.filter(c => c.read === true)
-        return ele
-      } else {
-        return test2
-      }
 
-    })
+  const toggleRead = (email) => {
+    setEmails(x => x.map(c => c === email ? { ...email, read: !email.read } : c))
   }
 
-  const test = initEmails.map((email) => {
+  const toggleStar = (email) => {
+    setEmails(x => x.map(c => c === email ? { ...email, starred: !email.starred } : c))
+  }
+
+  const getReadEmails = (e) => {
+    test2 = e.target.checked
+    setEmails([...initEmails])
+  }
+
+  const getStarredEmails = (e) => {
+    setEmails(x => {
+      return x.filter(c => c.starred === true)
+    })
+    console.log(e)
+  }
+
+  const getInbox = () => {
+    setEmails(x => {
+      return [...x]
+    })
+  }
+  const runEmail = initEmails.map((email) => {
+
     return (
+
+      (!test2 || !email.read) &&
       <Email
+        key={ email.id }
+        star={ () => toggleStar(email) }
+        read={ () => toggleRead(email) }
         email={ email }
       />
     )
   })
 
-  test2 = test
+  // test2 = runEmail
 
   return (
     <div className="app">
@@ -37,14 +59,14 @@ function App () {
         <ul className="inbox-list">
           <li
             className="item active"
-          // onClick={() => {}}
+            onClick={ getInbox }
           >
             <span className="label">Inbox</span>
             <span className="count">?</span>
           </li>
           <li
             className="item"
-          // onClick={() => {}}
+            onClick={ getStarredEmails }
           >
             <span className="label">Starred</span>
             <span className="count">?</span>
@@ -62,7 +84,7 @@ function App () {
       </nav>
       <main className="emails">
         <ul>
-          { test }
+          { runEmail }
         </ul>
       </main>
     </div>
@@ -70,3 +92,4 @@ function App () {
 }
 
 export default App
+
