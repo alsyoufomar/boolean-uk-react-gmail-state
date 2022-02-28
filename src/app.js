@@ -40,14 +40,14 @@ function App () {
       <nav className="left-menu">
         <ul className="inbox-list">
           <li
-            className="item active"
+            className={ `item ${showStarred ? "active" : null}` }
             onClick={ e => setStarred(true) }
           >
             <span className="label">Inbox</span>
             <span className="count">{ initEmails.length }</span>
           </li>
           <li
-            className="item"
+            className={ `item ${!showStarred ? "active" : null}` }
             onClick={ e => setStarred(false) }
           >
             <span className="label">Starred</span>

@@ -1,7 +1,6 @@
 import React from 'react'
 
 export default function email (props) {
-
   return (
     <li className="email">
       <div className="select">
