@@ -6,15 +6,18 @@ export default function email (props) {
     <li className="email">
       <div className="select">
         <input
-          onChange={ props.read }
+          onChange={ () => props.toggleRead(props.email) }
           className="select-checkbox"
-          type="checkbox" />
+          type="checkbox"
+          checked={ props.email.read }
+        />
       </div>
       <div className="star">
         <input
-          onChange={ props.star }
+          onChange={ () => props.toggleStar(props.email) }
           className="star-checkbox"
           type="checkbox"
+          checked={ props.email.starred }
         />
       </div>
       <div className="sender">{ props.email.sender }</div>

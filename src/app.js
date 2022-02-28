@@ -5,11 +5,11 @@ import { useState } from 'react'
 import initialEmails from './data/emails'
 import Email from './components/email'
 import './styles/app.css'
-let test2
 function App () {
   // Use initialEmails for state
-  let [initEmails, setEmails] = useState(initialEmails)
-
+  const [initEmails, setEmails] = useState(initialEmails)
+  const [showRead, setRead] = useState(true)
+  const [showStarred, setStarred] = useState(true)
 
   const toggleRead = (email) => {
     setEmails(x => x.map(c => c === email ? { ...email, read: !email.read } : c))
@@ -19,38 +19,20 @@ function App () {
     setEmails(x => x.map(c => c === email ? { ...email, starred: !email.starred } : c))
   }
 
-  const getReadEmails = (e) => {
-    test2 = e.target.checked
-    setEmails([...initEmails])
-  }
-
-  const getStarredEmails = (e) => {
-    setEmails(x => {
-      return x.filter(c => c.starred === true)
-    })
-    console.log(e)
-  }
-
-  const getInbox = () => {
-    setEmails(x => {
-      return [...x]
-    })
-  }
+  const starredEmails = initEmails.filter(c => c.starred)
   const runEmail = initEmails.map((email) => {
-
     return (
-
-      (!test2 || !email.read) &&
+      (showStarred || email.starred) &&
+      (!showRead || !email.read) &&
       <Email
         key={ email.id }
-        star={ () => toggleStar(email) }
-        read={ () => toggleRead(email) }
+        toggleStar={ toggleStar }
+        toggleRead={ toggleRead }
         email={ email }
       />
     )
   })
 
-  // test2 = runEmail
 
   return (
     <div className="app">
@@ -59,17 +41,17 @@ function App () {
         <ul className="inbox-list">
           <li
             className="item active"
-            onClick={ getInbox }
+            onClick={ e => setStarred(true) }
           >
             <span className="label">Inbox</span>
-            <span className="count">?</span>
+            <span className="count">{ initEmails.length }</span>
           </li>
           <li
             className="item"
-            onClick={ getStarredEmails }
+            onClick={ e => setStarred(false) }
           >
             <span className="label">Starred</span>
-            <span className="count">?</span>
+            <span className="count">{ starredEmails.length }</span>
           </li>
 
           <li className="item toggle">
@@ -77,7 +59,8 @@ function App () {
             <input
               id="hide-read"
               type="checkbox"
-              onChange={ getReadEmails }
+              onChange={ e => setRead(e.target.checked) }
+              checked={ showRead }
             />
           </li>
         </ul>
